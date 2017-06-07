@@ -32,7 +32,7 @@ public class FuzzBuzzControllerTest {
 	public void setup() throws Exception {
 
 		restTemplate = new TestRestTemplate();
-		stubFor(get(urlEqualTo("/fizzbuzz/8"))
+		stubFor(get(urlEqualTo("/aviva/fizzbuzz/8"))
 			
 				                .willReturn(aResponse()
 				
@@ -44,9 +44,11 @@ public class FuzzBuzzControllerTest {
 	@Test
 	    public void getFizzBuzz() {
 		
-	  ResponseEntity response = restTemplate.getForEntity("http://localhost:8080/fizzbuzz/8", String.class);
+	  ResponseEntity response = restTemplate.getForEntity("http://localhost:8089/aviva/fizzbuzz/8", String.class);
 	
 	        assertTrue("Verify Status Code", response.getStatusCode().equals(HttpStatus.OK));
+	        verify(getRequestedFor(urlMatching("/aviva/fizzbuzz/8")));
+
 
 	    }
 
