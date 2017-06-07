@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
@@ -91,13 +92,42 @@ public class FizzBuzzController {
 		return new FizzBuzzImpl();
 	}
 
+	
+	
 	@GET
 	@Path("/{number}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public List<String> fizzBuzz(@PathParam("number") int lastcount) {
-		List<String> test = fizzBuzz.printFizzBuzz(lastcount);// .collect(Collectors.toList());
-		return test;
+		if(fizzBuzz.isValidateCount(lastcount)){
+			return fizzBuzz.printFizzBuzz(lastcount);
+		}else {
+			throw new WebApplicationException("Value is not in the range limit");
+		}
+	}
+	
+	@GET
+	@Path("/day/{number}?date={date}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<String> fizzBuzzDay(@PathParam("number") int lastcount, @QueryParam("date") CharSequence date) {
+		if(fizzBuzz.isValidateCount(lastcount)){
+			return fizzBuzz.printFizzBuzzDay(lastcount, date);
+		}else {
+			throw new WebApplicationException("Value is not in the range limit");
+		}
+	}
+
+	@GET
+	@Path("/day/{number}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<String> fizzBuzzDay(@PathParam("number") int lastcount) {
+		if(fizzBuzz.isValidateCount(lastcount)){
+			return fizzBuzz.printFizzBuzzDay(lastcount);
+		}else {
+			throw new WebApplicationException("Value is not in the range limit");
+		}
 	}
 
 }

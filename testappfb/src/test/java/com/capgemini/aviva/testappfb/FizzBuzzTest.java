@@ -27,7 +27,7 @@ public class FizzBuzzTest {
 	private String expected ;
 	
 	
-	private FizzBuzz fizzBuzz = new FizzBuzzImpl();
+	//private FizzBuzz fizzBuzz = new FizzBuzzImpl();
 	
    /* @Test
     public void testForOne() {
