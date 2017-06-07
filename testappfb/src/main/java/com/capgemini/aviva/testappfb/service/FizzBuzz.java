@@ -1,9 +1,10 @@
 package com.capgemini.aviva.testappfb.service;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface FizzBuzz {
 	
-	public String printFizzBuzz(int lastcount);
+	public List<String> printFizzBuzz(int lastcount);
 
 }

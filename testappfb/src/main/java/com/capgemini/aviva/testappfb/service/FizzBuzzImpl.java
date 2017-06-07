@@ -1,30 +1,29 @@
 package com.capgemini.aviva.testappfb.service;
 
-import java.util.function.IntPredicate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class FizzBuzzImpl implements FizzBuzz{
 
 	
 	@Override
-	public  String printFizzBuzz(int lastcount) {
-		 StringBuffer bfr = new StringBuffer();
-	    	  IntPredicate dividesBy3 = i -> i % 3 == 0;
-	          IntPredicate dividesBy5 = i -> i % 5 == 0;
-	          IntPredicate doesntDivide = dividesBy3.negate().and(dividesBy5.negate());
+	public  List<String> printFizzBuzz(int lastcount) {
+		List<String> output = (List<String>) ((List<?>) IntStream
+				.rangeClosed(1, lastcount).mapToObj(i -> {
+					if (i % 3 == 0 && i % 5 != 0) {
+						return "Fizz";
+					} else if (i % 5 == 0 && i % 3 != 0) {
+						return "Buzz";
+					} else if (i % 5 == 0 && i % 3 == 0) {
+						return "FizzBuzz";
+					} else {
+						return String.valueOf(i);
+					}
+				}).collect(Collectors.toCollection(ArrayList::new)));
 
-	          IntStream.rangeClosed(0, lastcount).forEach(i -> {
-	             
-
-	              if (dividesBy3.test(i)) bfr.append("Fizz");
-	              if (dividesBy5.test(i)) bfr.append("Buzz");
-	              if (doesntDivide.test(i)) bfr.append(i);
-
-	              System.out.println(bfr);
-	             
-	      });
-	          return bfr.toString();
+		return output;
 			
 	    
 	}

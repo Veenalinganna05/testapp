@@ -7,12 +7,17 @@ import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Feature;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.Provider;
 
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
+import org.apache.cxf.jaxrs.swagger.SwaggerFeature;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.capgemini.aviva.testappfb.service.FizzBuzz;
 import com.capgemini.aviva.testappfb.service.FizzBuzzImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 
 @SpringBootApplication
@@ -58,14 +65,17 @@ public class FizzBuzzController {
 	public Server jaxRsServer() {
 		// Find all beans annotated with @Path
 		List<Object> serviceBeans = new ArrayList<>(ctx.getBeansWithAnnotation(Path.class).values());
-
+		
+		
 		JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
 		factory.setBus(ctx.getBean(SpringBus.class));
 		factory.setAddress("/");
 		factory.setServiceBeans(serviceBeans);
+		factory.setProvider(new JacksonJaxbJsonProvider());
 		return factory.create();
 
 	}
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(FizzBuzzController.class, args);
@@ -83,10 +93,11 @@ public class FizzBuzzController {
 
 	@GET
 	@Path("/{number}")
-	@Produces
-	@Consumes
-	public String fizzBuzz(@QueryParam("number") int lastcount) {
-		return fizzBuzz.printFizzBuzz(lastcount);// .collect(Collectors.toList());
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<String> fizzBuzz(@PathParam("number") int lastcount) {
+		List<String> test = fizzBuzz.printFizzBuzz(lastcount);// .collect(Collectors.toList());
+		return test;
 	}
 
 }
